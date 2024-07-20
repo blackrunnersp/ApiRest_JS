@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const pool = require('./config/database'); 
+const pool = require('./config/database');
+require('dotenv').config();
 
 app.use(express.json());
 
@@ -12,5 +13,5 @@ app.use((req, res, next) => {
   res.status(404).json({ message: 'Endpoint not found.' });
 });
 
-// Cambia l'esportazione per essere compatibile con Vercel
+// Per Vercel, devi esportare l'app come una funzione
 module.exports = app;
