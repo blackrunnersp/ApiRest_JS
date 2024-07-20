@@ -1,15 +1,15 @@
 {
-    "name": "my-node-api",
+    "name": "api-rest-nodejs",
     "version": "1.0.0",
-    "description": "API for managing film and episode watch data",
+    "description": "API REST in Node.js con MySQL e Vercel",
     "main": "index.js",
     "scripts": {
       "start": "node index.js"
     },
     "dependencies": {
+      "dotenv": "^16.0.0",
       "express": "^4.17.1",
-      "mysql2": "^2.3.3",
-      "dotenv": "^16.0.3"
+      "mysql2": "^2.3.3"
     }
   }
   
