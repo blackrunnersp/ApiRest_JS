@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import pool from '../config/database.js';  // Usa import per il modulo database.js
+import authenticate from '../utils/authenticate.js';  // Usa import per il modulo authenticate.js
+
 const router = express.Router();
-const pool = require('../config/database.js');
-const authenticate = require('../utils/authenticate.js');
 
 router.get('/', authenticate, async (req, res) => {
   try {
@@ -25,4 +26,4 @@ router.post('/', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

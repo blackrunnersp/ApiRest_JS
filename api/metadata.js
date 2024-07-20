@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import pool from '../config/database.js';  // Assicurati che database.js esporti pool con 'export default pool;'
+import authenticate from '../utils/authenticate.js';  // Assicurati che authenticate.js esporti authenticate con 'export default authenticate;'
+
 const router = express.Router();
-const pool = require('../config/database.js');
-const authenticate = require('../utils/authenticate.js');
 
 router.get('/', authenticate, async (req, res) => {
   const tableName = req.headers['table_name'];
@@ -21,4 +22,4 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

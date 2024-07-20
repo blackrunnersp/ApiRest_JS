@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import pool from '../config/database.js';  // Importa pool come ES Module
+import authenticate from '../utils/authenticate.js';  // Importa authenticate come ES Module
+
 const router = express.Router();
-const pool = require('../config/database.js');
-const authenticate = require('../utils/authenticate.js');
 
 router.get('/', authenticate, async (req, res) => {
   try {
@@ -12,4 +13,4 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
