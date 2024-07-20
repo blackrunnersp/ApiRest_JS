@@ -19,7 +19,7 @@ connectClient();
 
 
 // Esempio di rotta GET
-router.get('/', async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
     try {
         // Esegui una query di esempio
         const result = await client.query('SELECT * FROM userfilmwatched');
@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 });
 
 // Rotta POST per inserire dati
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
     const { iduser, idfilm, time, totaltime, watchdate } = req.body;
 
     // Verifica che tutti i campi siano presenti
