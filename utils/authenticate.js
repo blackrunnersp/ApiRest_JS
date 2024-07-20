@@ -3,8 +3,9 @@ const authenticate = (req, res, next) => {
     if (apiKey && apiKey === process.env.API_KEY) {
       next();
     } else {
-      res.status(403).json({ message: 'Access denied.' });
+      res.status(403).json({ message: 'Accesso negato.' });
     }
   };
   
-  export default authenticate;
+  module.exports = authenticate;
+  

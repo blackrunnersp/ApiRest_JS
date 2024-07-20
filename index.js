@@ -1,22 +1,39 @@
-import express from 'express';
-import serverless from 'serverless-http';
-import usersRouter from './api/users.js';
-import metadataRouter from './api/metadata.js';
-import userWatchedRouter from './api/userWatched.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
+const express = require('express');
 const app = express();
+const port = 3000;
+const serverless = require('serverless-http');
+const pool = require('./config/database'); // Configurazione del database
+const authenticate = require('./utils/authenticate');
+
+// Middleware per parsing del corpo delle richieste in JSON
 app.use(express.json());
 
-app.use('/api/users', usersRouter);
-app.use('/api/metadata', metadataRouter);
-app.use('/api/userWatched', userWatchedRouter);
-
-app.use((req, res) => {
-  res.status(404).json({ message: 'Endpoint not found.' });
+// Rotte di esempio
+app.get('/api', (req, res) => {
+  res.json({ message: 'Benvenuto nella mia API!' });
 });
 
-// Esporta come handler per Vercel
-export const handler = serverless(app);
+app.post('/api/data', (req, res) => {
+  const data = req.body;
+  res.json({ received: data });
+});
+
+// Rotte API
+
+app.use('/api/users', require('./api/users'));
+app.use('/api/test', require('./api/test'));
+app.use('/api/metadata', require('./api/metadata'));
+app.use('/api/userWatched', require('./api/userWatched'));
+
+// Middleware per gestione degli errori 404
+app.use((req, res, next) => {
+  res.status(404).json({ message: 'Endpoint non trovato.' });
+});
+
+// Avvia il server
+app.listen(port, () => {
+  console.log(`Server in ascolto su http://localhost:${port}`);
+});
+
+// Esporta come funzione serverless per Vercel
+module.exports.handler = serverless(app);

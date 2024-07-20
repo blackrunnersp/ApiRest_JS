@@ -1,11 +1,39 @@
-import mysql from 'mysql2/promise';
-import 'dotenv/config';  // Importa dotenv per caricare le variabili ambientali
+const fs = require('fs');
+const { Client } = require('pg');
+require('dotenv').config();
 
-const pool = mysql.createPool({
+// Configura il client PostgreSQL
+const client = new Client({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
-  database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
+  ssl: {
+    rejectUnauthorized: true,
+    ca: process.env.DB_CA_CERT ? Buffer.from(process.env.DB_CA_CERT, 'utf-8') : undefined
+  }
 });
 
-export default pool;
+// Funzione per connettersi al database
+const connectClient = async () => {
+  try {
+    await client.connect();
+    console.log('Connessione al database riuscita.');
+  } catch (err) {
+    console.error('Errore durante la connessione al database:', err.message);
+  }
+};
+
+// Funzione per chiudere la connessione al database
+const disconnectClient = async () => {
+  try {
+    await client.end();
+    console.log('Connessione al database chiusa.');
+  } catch (err) {
+    console.error('Errore durante la chiusura della connessione al database:', err.message);
+  }
+};
+
+
+module.exports = { client, connectClient, disconnectClient };
