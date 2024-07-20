@@ -16,6 +16,7 @@ const executeQuery = async (query, params = []) => {
 
 // Connessione al database all'avvio dell'app
 connectClient();
+checkDatabaseConnection();
 
 // Esempio di rotta GET
 router.get('/', async (req, res) => {
