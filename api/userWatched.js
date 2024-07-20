@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../config/database');
-const authenticate = require('../utils/authenticate');
+const pool = require('./config/database');
+const authenticate = require('./utils/authenticate');
 
 router.get('/', authenticate, async (req, res) => {
   try {
