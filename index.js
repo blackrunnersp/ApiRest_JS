@@ -30,5 +30,5 @@ app.use((req, res, next) => {
   res.status(404).json({ message: 'Endpoint non trovato.' });
 });
 
-// Esporta come funzione serverless per Vercel
+// Esporta come funzione serverless per Verce
 module.exports.handler = serverless(app);
