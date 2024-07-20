@@ -1,7 +1,8 @@
 const express = require('express');
-const app = express();
-const port = 3000;
 const serverless = require('serverless-http');
+const app = express();
+const port = 3000; // Questa porta è solo per lo sviluppo locale
+
 const pool = require('./config/database'); // Configurazione del database
 const authenticate = require('./utils/authenticate');
 
@@ -19,20 +20,14 @@ app.post('/api/data', (req, res) => {
 });
 
 // Rotte API
-
-app.use('/api/users', require('./api/users'));
 app.use('/api/test', require('./api/test'));
+app.use('/api/users', require('./api/users'));
 app.use('/api/metadata', require('./api/metadata'));
 app.use('/api/userWatched', require('./api/userWatched'));
 
 // Middleware per gestione degli errori 404
 app.use((req, res, next) => {
   res.status(404).json({ message: 'Endpoint non trovato.' });
-});
-
-// Avvia il server
-app.listen(port, () => {
-  console.log(`Server in ascolto su http://localhost:${port}`);
 });
 
 // Esporta come funzione serverless per Vercel
