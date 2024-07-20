@@ -30,10 +30,7 @@ app.use((req, res, next) => {
   res.status(404).json({ message: 'Endpoint non trovato.' });
 });
 
-// Avvia il server
-app.listen(port, () => {
-  console.log(`Server in ascolto su http://localhost:${port}`);
-});
 
-// Esporta come funzione serverless per Vercel
+
+// **Corrected Export:**
 module.exports.handler = serverless(app);
