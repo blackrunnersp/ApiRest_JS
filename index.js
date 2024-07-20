@@ -1,9 +1,10 @@
 const express = require('express');
-const app = express();
-const port = 3000;
 const serverless = require('serverless-http');
 const pool = require('./config/database'); // Configurazione del database
 const authenticate = require('./utils/authenticate');
+
+const app = express();
+const port = 3000;
 
 // Middleware per parsing del corpo delle richieste in JSON
 app.use(express.json());
@@ -19,7 +20,6 @@ app.post('/api/data', (req, res) => {
 });
 
 // Rotte API
-
 app.use('/api/users', require('./api/users'));
 app.use('/api/test', require('./api/test'));
 app.use('/api/metadata', require('./api/metadata'));
@@ -31,4 +31,4 @@ app.use((req, res, next) => {
 });
 
 // Esporta come funzione serverless per Vercel
-module.exports.handler = serverless(app);
+module.exports = serverless(app);
