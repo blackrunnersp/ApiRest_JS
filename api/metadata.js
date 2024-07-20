@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('./config/database');
-const authenticate = require('./utils/authenticate');
+const pool = require('../config/database.js');
+const authenticate = require('../utils/authenticate.js');
 
 router.get('/', authenticate, async (req, res) => {
   const tableName = req.headers['table_name'];

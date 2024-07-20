@@ -1,7 +1,7 @@
-import express from 'express';
+const express = require('express');
 const serverless = require('serverless-http');
 const app = express();
-const pool = require('./config/database');
+const pool = require('./config/database.js');
 require('dotenv').config();
 
 app.use(express.json());
