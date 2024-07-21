@@ -20,10 +20,9 @@ app.post('/api/data', (req, res) => {
 });
 
 // Rotte API
-app.use('/api/users', require('./api/users'));
-app.use('/api/test', require('./api/test'));
 app.use('/api/metadata', require('./api/metadata'));
-app.use('/api/userWatched', require('./api/userWatched'));
+app.use('/api/userfilmwatched', require('./api/userfilmwatched'));
+app.use('/api/userepisodewatched', require('./api/userepisodewatched'));
 
 // Middleware per gestione degli errori 404
 app.use((req, res, next) => {

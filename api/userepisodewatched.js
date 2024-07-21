@@ -7,7 +7,7 @@ const authenticate = require('../utils/authenticate');
 router.get('/', authenticate, async (req, res) => {
     try {
         // Esegui una query di esempio
-        const result = await dbClient.query('SELECT * FROM userfilmwatched');
+        const result = await dbClient.query('SELECT * FROM userepisodewatched');
         res.status(200).json(result.rows);
     } catch (err) {
         console.error('Errore durante l\'esecuzione della query:', err.message);
@@ -27,7 +27,7 @@ router.post('/', authenticate, async (req, res) => {
     try {
         // Query di inserimento
         const query = `
-        INSERT INTO userfilmwatched (iduser, idfilm, time, totaltime, watchdate)
+        INSERT INTO userepisodewatched (iduser, idfilm, time, totaltime, watchdate)
         VALUES ($1, $2, $3, $4, $5)
         ON CONFLICT (iduser, idfilm) 
         DO UPDATE SET
