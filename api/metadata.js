@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../config/database');
+const { client, connectClient, disconnectClient } = require('../config/database');
 const authenticate = require('../utils/authenticate');
 
 router.get('/', authenticate, async (req, res) => {
 
   try {
-    const [rows] = await pool.query('SELECT last_updated FROM metadata');
+    const [rows] = await client.query('SELECT last_updated FROM metadata');
     if (rows.length > 0) {
       res.status(200).json({ last_update: rows[0].last_update });
     } else {
