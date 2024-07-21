@@ -1,0 +1,19 @@
+-- Creazione della tabella metadata
+CREATE TABLE metadata (
+    id SERIAL PRIMARY KEY,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Creazione del trigger per mantenere una sola riga nella tabella
+CREATE OR REPLACE FUNCTION maintain_single_row()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM metadata;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER maintain_single_row_trigger
+BEFORE INSERT ON metadata
+FOR EACH ROW
+EXECUTE FUNCTION maintain_single_row();

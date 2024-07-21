@@ -4,13 +4,9 @@ const pool = require('../config/database');
 const authenticate = require('../utils/authenticate');
 
 router.get('/', authenticate, async (req, res) => {
-  const tableName = req.headers['table_name'];
-  if (!tableName) {
-    return res.status(400).json({ message: 'Header table_name mancante.' });
-  }
 
   try {
-    const [rows] = await pool.query('SELECT last_update FROM metadata WHERE table_name = ?', [tableName]);
+    const [rows] = await pool.query('SELECT last_updated FROM metadata');
     if (rows.length > 0) {
       res.status(200).json({ last_update: rows[0].last_update });
     } else {
