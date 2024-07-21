@@ -17,36 +17,47 @@ router.get('/', authenticate, async (req, res) => {
 
 // Rotta POST per inserire dati
 router.post('/', authenticate, async (req, res) => {
-    const { idUser, idMovie, time, totalTime, watchDate } = req.body;
+    const records = req.body;
 
-    // Verifica che tutti i campi siano presenti
-    if (!idUser || !idMovie || !time || !totalTime || !watchDate) {
-        return res.status(400).json({ message: 'Tutti i campi sono richiesti' });
+    if (!Array.isArray(records) || records.length === 0) {
+        return res.status(400).json({ message: 'Devi fornire un array di record' });
+    }
+
+    // Verifica che tutti i record contengano i campi richiesti
+    for (const record of records) {
+        const { idUser, idMovie, time, totalTime, watchDate } = record;
+        if (!idUser || !idMovie || !time || !totalTime || !watchDate) {
+            return res.status(400).json({ message: 'Tutti i campi sono richiesti per ogni record' });
+        }
     }
 
     try {
-        // Query di inserimento
-        const query = `
-        INSERT INTO userfilmwatched (idUser, idMovie, time, totalTime, watchDate)
-        VALUES ($1, $2, $3, $4, $5)
-        ON CONFLICT (idUser, idMovie) 
-        DO UPDATE SET
-          time = EXCLUDED.time,
-          totalTime = EXCLUDED.totalTime,
-          watchDate = EXCLUDED.watchDate
-        RETURNING *;
-      `;
-        const values = [idUser, idMovie, time, totalTime, watchDate];
+        const results = [];
+        for (const record of records) {
+            const { idUser, idMovie, time, totalTime, watchDate } = record;
 
-        // Esegui la query
-        const result = await dbClient.query(query, values);
+            const query = `
+            INSERT INTO userfilmwatched (idUser, idMovie, time, totalTime, watchDate)
+            VALUES ($1, $2, $3, $4, $5)
+            ON CONFLICT (idUser, idMovie) 
+            DO UPDATE SET
+              time = EXCLUDED.time,
+              totalTime = EXCLUDED.totalTime,
+              watchDate = EXCLUDED.watchDate
+            RETURNING *;
+          `;
+            const values = [idUser, idMovie, time, totalTime, watchDate];
 
-        // Restituisci il risultato
-        res.status(201).json(result.rows[0]);
+            const result = await dbClient.query(query, values);
+            results.push(result.rows[0]);
+        }
+
+        res.status(201).json(results);
     } catch (err) {
         console.error('Errore durante l\'inserimento dei dati:', err.message);
         res.status(500).json({ message: 'Errore durante l\'inserimento dei dati', error: err.message });
     }
 });
+
 
 module.exports = router;

@@ -14,11 +14,6 @@ app.get('/api', (req, res) => {
   res.json({ message: 'Benvenuto nella mia API!' });
 });
 
-app.post('/api/data', (req, res) => {
-  const data = req.body;
-  res.json({ received: data });
-});
-
 // Rotte API
 app.use('/api/metadata', require('./api/metadata'));
 app.use('/api/userfilmwatched', require('./api/userfilmwatched'));
