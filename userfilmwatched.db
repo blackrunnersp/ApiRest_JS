@@ -1,0 +1,8 @@
+CREATE TABLE userfilmwatched (
+    idUser INT,
+    idFilm INT,
+    time INT,
+    totalTime INT,
+    watchDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Tipo di dato TIMESTAMP con valore predefinito NOW()
+    PRIMARY KEY (idUser, idFilm) -- Definizione della chiave primaria composta
+);

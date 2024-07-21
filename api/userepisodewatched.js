@@ -17,26 +17,24 @@ router.get('/', authenticate, async (req, res) => {
 
 // Rotta POST per inserire dati
 router.post('/', authenticate, async (req, res) => {
-    const { iduser, idfilm, time, totaltime, watchdate } = req.body;
+    const { iduser, idshow, idseason, idepisode, time, totaltime, watchdate } = req.body;
 
     // Verifica che tutti i campi siano presenti
-    if (!iduser || !idfilm || !time || !totaltime || !watchdate) {
+    if (!iduser || !idshow || !idseason || !idepisode || !time || !totaltime || !watchdate) {
         return res.status(400).json({ message: 'Tutti i campi sono richiesti' });
     }
 
     try {
         // Query di inserimento
         const query = `
-        INSERT INTO userepisodewatched (iduser, idfilm, time, totaltime, watchdate)
-        VALUES ($1, $2, $3, $4, $5)
-        ON CONFLICT (iduser, idfilm) 
-        DO UPDATE SET
-          time = EXCLUDED.time,
-          totaltime = EXCLUDED.totaltime,
-          watchdate = EXCLUDED.watchdate
-        RETURNING *;
-      `;
-        const values = [iduser, idfilm, time, totaltime, watchdate];
+        INSERT INTO userepisodewatched (iduser, idshow, idseason, idepisode, time, totaltime, watchdate)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+          time = VALUES(time),
+          totaltime = VALUES(totaltime),
+          watchdate = VALUES(watchdate)
+    `;
+        const values = [iduser, idshow, idseason, idepisode, time, totaltime, watchdate];
 
         // Esegui la query
         const result = await dbClient.query(query, values);

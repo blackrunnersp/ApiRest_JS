@@ -1,0 +1,10 @@
+CREATE TABLE userepisodewatched (
+    idUser INT,
+    idShow INT,
+    idSeason INT,
+    idEpisode INT,
+    time INT,
+    totalTime INT,
+    watchDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Tipo di dato TIMESTAMP con valore predefinito NOW()
+    PRIMARY KEY (idUser, idShow, idSeason, idEpisode) -- Definizione della chiave primaria composta
+);
