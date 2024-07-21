@@ -34,9 +34,13 @@ class DatabaseClient {
     }
   }
 
-  async query(text, params) {
+  async query(text, params = []) {
     try {
-      const result = await this.client.query(text, params);
+      // Esegui la query, passando i parametri se presenti
+      const result = params.length > 0
+        ? await this.client.query(text, params)
+        : await this.client.query(text);
+
       return result;
     } catch (err) {
       throw new Error(`Errore durante l'esecuzione della query: ${err.message}`);

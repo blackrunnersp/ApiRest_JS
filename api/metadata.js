@@ -3,10 +3,8 @@ const router = express.Router();
 const dbClient = require('../config/database');
 const authenticate = require('../utils/authenticate');
 
-
-
+// Esempio di rotta GET
 router.get('/', authenticate, async (req, res) => {
-
   try {
     // Esegui una query di esempio
     const result = await dbClient.query('SELECT * FROM metadata');
@@ -17,6 +15,27 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
+// Rotta POST per inserire dati
+router.post('/', authenticate, async (req, res) => {
+  const { last_updated } = req.body;
 
+  try {
+    // Query di inserimento
+    const query = `
+      INSERT INTO metadata (last_updated)
+      VALUES (NOW())
+      RETURNING *;
+    `;
+    
+    // Esegui la query
+    const result = await dbClient.query(query);
+
+    // Restituisci il risultato
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Errore durante l\'inserimento dei dati:', err.message);
+    res.status(500).json({ message: 'Errore durante l\'inserimento dei dati', error: err.message });
+  }
+});
 
 module.exports = router;
