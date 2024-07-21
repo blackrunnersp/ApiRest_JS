@@ -19,6 +19,11 @@ router.get('/', authenticate, async (req, res) => {
 router.post('/', authenticate, async (req, res) => {
   const { last_updated } = req.body;
 
+  // Verifica se last_updated è presente nel corpo della richiesta
+  if (last_updated === undefined) {
+    return res.status(400).json({ message: 'Il campo last_updated è obbligatorio.' });
+  }
+
   try {
     // Query di inserimento
     const query = `
@@ -26,7 +31,7 @@ router.post('/', authenticate, async (req, res) => {
       VALUES (NOW())
       RETURNING *;
     `;
-    
+
     // Esegui la query
     const result = await dbClient.query(query);
 
