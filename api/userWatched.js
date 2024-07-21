@@ -1,28 +1,52 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../config/database');
+const dbClient = require('../config/database');
 const authenticate = require('../utils/authenticate');
 
+// Esempio di rotta GET
 router.get('/', authenticate, async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT * FROM user_watched');
-    res.status(200).json(rows);
-  } catch (err) {
-    res.status(500).json({ message: 'Errore nel recupero dei dati degli utenti visti' });
-  }
+    try {
+        // Esegui una query di esempio
+        const result = await dbClient.query('SELECT * FROM userfilmwatched');
+        res.status(200).json(result.rows);
+    } catch (err) {
+        console.error('Errore durante l\'esecuzione della query:', err.message);
+        res.status(500).json({ message: 'Errore durante l\'esecuzione della query', error: err.message });
+    }
 });
 
+// Rotta POST per inserire dati
 router.post('/', authenticate, async (req, res) => {
-  const { idUser, idFilm, time, totalTime, watchDate } = req.body;
-  try {
-    await pool.query(
-      'INSERT INTO user_watched (idUser, idFilm, time, totalTime, watchDate) VALUES (?, ?, ?, ?, ?)',
-      [idUser, idFilm, time, totalTime, watchDate]
-    );
-    res.status(201).json({ message: 'Dati degli utenti visti inseriti' });
-  } catch (err) {
-    res.status(500).json({ message: 'Errore nell\'inserimento dei dati degli utenti visti' });
-  }
+    const { iduser, idfilm, time, totaltime, watchdate } = req.body;
+
+    // Verifica che tutti i campi siano presenti
+    if (!iduser || !idfilm || !time || !totaltime || !watchdate) {
+        return res.status(400).json({ message: 'Tutti i campi sono richiesti' });
+    }
+
+    try {
+        // Query di inserimento
+        const query = `
+        INSERT INTO userfilmwatched (iduser, idfilm, time, totaltime, watchdate)
+        VALUES ($1, $2, $3, $4, $5)
+        ON CONFLICT (iduser, idfilm) 
+        DO UPDATE SET
+          time = EXCLUDED.time,
+          totaltime = EXCLUDED.totaltime,
+          watchdate = EXCLUDED.watchdate
+        RETURNING *;
+      `;
+        const values = [iduser, idfilm, time, totaltime, watchdate];
+
+        // Esegui la query
+        const result = await dbClient.query(query, values);
+
+        // Restituisci il risultato
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        console.error('Errore durante l\'inserimento dei dati:', err.message);
+        res.status(500).json({ message: 'Errore durante l\'inserimento dei dati', error: err.message });
+    }
 });
 
 module.exports = router;
