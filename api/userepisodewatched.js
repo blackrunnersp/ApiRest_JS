@@ -27,13 +27,15 @@ router.post('/', authenticate, async (req, res) => {
     try {
         // Query di inserimento
         const query = `
-        INSERT INTO userepisodewatched (idUser, idShow, idSeason, idEpisode, time, totalTime, watchDate)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE
-          time = VALUES(time),
-          totalTime = VALUES(totalTime),
-          watchDate = VALUES(watchDate)
-    `;
+        INSERT INTO userfilmwatched (idUser, idShow, idSeason, idEpisode, time, totalTime, watchDate)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        ON CONFLICT (idUser, idShow, idSeason, idEpisode) 
+        DO UPDATE SET
+          time = EXCLUDED.time,
+          totalTime = EXCLUDED.totalTime,
+          watchDate = EXCLUDED.watchDate
+        RETURNING *;
+      `;
         const values = [idUser, idShow, idSeason, idEpisode, time, totalTime, watchDate];
 
         // Esegui la query
