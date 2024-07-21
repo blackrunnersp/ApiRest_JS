@@ -27,7 +27,7 @@ router.post('/', authenticate, async (req, res) => {
     try {
         // Query di inserimento
         const query = `
-        INSERT INTO userfilmwatched (idUser, idShow, idSeason, idEpisode, time, totalTime, watchDate)
+        INSERT INTO userepisodewatched (idUser, idShow, idSeason, idEpisode, time, totalTime, watchDate)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         ON CONFLICT (idUser, idShow, idSeason, idEpisode) 
         DO UPDATE SET
