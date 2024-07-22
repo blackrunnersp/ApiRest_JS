@@ -25,8 +25,8 @@ router.post('/', authenticate, async (req, res) => {
 
     // Verifica che tutti i record contengano i campi richiesti
     for (const record of records) {
-        const { idUser, idFilm, time, totalTime, watchDate } = record;
-        if (!idUser || !idFilm || !time || !totalTime || !watchDate) {
+        const { iduser, idfilm, time, totaltime, watchdate } = record;
+        if (!iduser || !idfilm || !time || !totaltime || !watchdate) {
             return res.status(400).json({ message: 'Tutti i campi sono richiesti per ogni record' });
         }
     }
@@ -34,7 +34,7 @@ router.post('/', authenticate, async (req, res) => {
     try {
         const results = [];
         for (const record of records) {
-            const { idUser, idFilm, time, totalTime, watchDate } = record;
+            const { iduser, idfilm, time, totaltime, watchdate } = record;
 
             const query = `
             INSERT INTO userfilmwatched (idUser, idFilm, time, totalTime, watchDate)
@@ -46,7 +46,7 @@ router.post('/', authenticate, async (req, res) => {
               watchDate = EXCLUDED.watchDate
             RETURNING *;
           `;
-            const values = [idUser, idFilm, time, totalTime, watchDate];
+            const values = [iduser, idfilm, time, totaltime, watchdate];
 
             const result = await dbClient.query(query, values);
             results.push(result.rows[0]);
