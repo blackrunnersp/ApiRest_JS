@@ -45,7 +45,7 @@ router.post('/', authenticate, async (req, res) => {
               totalTime = EXCLUDED.totalTime,
               watchDate = EXCLUDED.watchDate
             RETURNING *;
-          `;
+        `;
             const values = [iduser, idfilm, time, totaltime, watchdate];
 
             const result = await dbClient.query(query, values);
