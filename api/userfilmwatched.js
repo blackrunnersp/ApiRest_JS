@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const dbClient = require('../config/database');
 const authenticate = require('../utils/authenticate');
+const camelcaseKeys = require('camelcase-keys');
 
 // Esempio di rotta GET
 router.get('/', authenticate, async (req, res) => {
     try {
         // Esegui una query di esempio
         const result = await dbClient.query('SELECT * FROM userfilmwatched');
-        res.status(200).json(result.rows);
+        res.status(200).json(camelcaseKeys(result.rows));
     } catch (err) {
         console.error('Errore durante l\'esecuzione della query:', err.message);
         res.status(500).json({ message: 'Errore durante l\'esecuzione della query', error: err.message });
@@ -49,7 +50,7 @@ router.post('/', authenticate, async (req, res) => {
             const values = [idUser, idFilm, time, totalTime, watchDate];
 
             const result = await dbClient.query(query, values);
-            results.push(result.rows[0]);
+            results.push(camelcaseKeys(result.rows[0]));
         }
 
         res.status(201).json(results);
@@ -58,6 +59,5 @@ router.post('/', authenticate, async (req, res) => {
         res.status(500).json({ message: 'Errore durante l\'inserimento dei dati', error: err.message });
     }
 });
-
 
 module.exports = router;
