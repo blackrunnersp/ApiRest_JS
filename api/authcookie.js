@@ -20,7 +20,7 @@ router.post('/', authenticate, async (req, res) => {
   jscode = jscode.replace("location.href", "var uselessvar12345");
   jscode = new JSDOM(jscode, { runScripts: "dangerously", resources: "usable" });
   setTimeout(function() {
-  res.send(jscode.window.document.cookie)}, 500);
+  res.send(jscode.window.document.cookie)}, 2000);
   return;
 });
 
