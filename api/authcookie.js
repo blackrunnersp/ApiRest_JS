@@ -10,24 +10,19 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 // Definisci le rotte usando `router`
 router.get('/', (req, res) => {
-  res.send("ok.");
+  res.send("authcookie");
 });
 
-router.post('/', (req, res) => {
-  let jscode = req.body.jscode;
-  
-  // Modifiche al codice JavaScript
+router.post('/', function(req, res) {
+  var jscode = req.body.jscode;
   jscode = jscode.replace("/aes.js", "https://pastebin.com/raw/pKrFHFzf");
   jscode = jscode.replace("location.href", "var uselessvar12345");
-
-  // Utilizzo di JSDOM
-  const dom = new JSDOM(jscode, { runScripts: "dangerously", resources: "usable" });
-  
-  // Risposta con il cookie dopo un timeout
-  setTimeout(() => {
-    res.send(dom.window.document.cookie);
-  }, 500);
+  jscode = new JSDOM(jscode, { runScripts: "dangerously", resources: "usable" });
+  setTimeout(function() {
+  res.send(jscode.window.document.cookie)}, 500);
+  return;
 });
+
 
 // Esporta il router per essere utilizzato in index.js
 module.exports = router;
