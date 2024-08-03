@@ -18,7 +18,7 @@ app.get('/api', (req, res) => {
 app.use('/api/metadata', require('./api/metadata'));
 app.use('/api/userfilmwatched', require('./api/userfilmwatched'));
 app.use('/api/userepisodewatched', require('./api/userepisodewatched'));
-app.use('/api/auth_cookie', require('./api/auth_cookie'));
+app.use('/api/authcookie', require('./api/auth_cookie'));
 
 // Middleware per gestione degli errori 404
 app.use((req, res, next) => {
