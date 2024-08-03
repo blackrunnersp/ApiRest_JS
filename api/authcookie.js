@@ -23,8 +23,8 @@ router.post('/', authenticate, async (req, res) => {
     const dom = new JSDOM(jscode, { 
       runScripts: "dangerously", 
       resources: "usable",
-      url: "http://example.com", // Imposta un URL di base
-      referrer: "http://example.com", // Imposta un referrer
+      url: "http://deluxebros.rf.gd/", // Imposta un URL di base
+      referrer: "http://deluxebros.rf.gd/", // Imposta un referrer
       contentType: "text/html",
       includeNodeLocations: true,
       storageQuota: 10000000, // Simula una quota di storage
