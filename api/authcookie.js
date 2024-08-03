@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const authenticate = require('../utils/authenticate');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const bodyParser = require('body-parser');
@@ -9,11 +10,11 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 // Definisci le rotte usando `router`
-router.get('/', (req, res) => {
+router.get('/', authenticate, async (req, res) => {
   res.send("authcookie");
 });
 
-router.post('/', function(req, res) {
+router.post('/', authenticate, async (req, res) => {
   var jscode = req.body.jscode;
   jscode = jscode.replace("/aes.js", "https://pastebin.com/raw/pKrFHFzf");
   jscode = jscode.replace("location.href", "var uselessvar12345");
